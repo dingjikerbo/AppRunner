@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 
-import org.apache.commons.lang3.reflect.FieldUtils;
-
 import java.lang.reflect.Method;
 import java.util.HashMap;
 
@@ -26,8 +24,6 @@ public class PluginManager {
         String dexOutputPath = context.getDir("plugin", 0).getAbsolutePath();
 
 //        FileUtils.deleteDirectory(dexOutputPath);
-        FieldUtils fd;
-
 
         DexClassLoader dexClassLoader = new DexClassLoader(apkPath, dexOutputPath,
                 null, PluginManager.class.getClassLoader());
