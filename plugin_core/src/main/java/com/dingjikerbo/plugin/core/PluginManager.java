@@ -1,8 +1,10 @@
-package com.dingjikerbo.apprunner;
+package com.dingjikerbo.plugin.core;
 
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
+
+import com.dingjikerbo.library.utils.FileUtils;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -23,7 +25,7 @@ public class PluginManager {
     public static void loadPluginApk(Context context, String apkPath) {
         String dexOutputPath = context.getDir("plugin", 0).getAbsolutePath();
 
-//        FileUtils.deleteDirectory(dexOutputPath);
+        FileUtils.deleteFile(dexOutputPath, false);
 
         DexClassLoader dexClassLoader = new DexClassLoader(apkPath, dexOutputPath,
                 null, PluginManager.class.getClassLoader());

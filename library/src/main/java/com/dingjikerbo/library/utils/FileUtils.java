@@ -529,7 +529,7 @@ public class FileUtils {
      * @param path
      * @return
      */
-    public static boolean deleteFile(String path) {
+    public static boolean deleteFile(String path, boolean deleteSelf) {
         if (StringUtils.isBlank(path)) {
             return true;
         }
@@ -548,10 +548,15 @@ public class FileUtils {
             if (f.isFile()) {
                 f.delete();
             } else if (f.isDirectory()) {
-                deleteFile(f.getAbsolutePath());
+                deleteFile(f.getAbsolutePath(), true);
             }
         }
-        return file.delete();
+
+        return deleteSelf ? file.delete() : true;
+    }
+
+    public static boolean deleteFile(String path) {
+        return deleteFile(path, true);
     }
 
     /**

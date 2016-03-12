@@ -1,4 +1,4 @@
-package com.dingjikerbo.apprunner;
+package com.dingjikerbo.plugin.core;
 
 import android.content.res.AssetManager;
 import android.content.res.Resources;
