@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 
+import com.dingjikerbo.library.Singleton;
 import com.dingjikerbo.library.utils.FileUtils;
 
 import java.lang.reflect.Method;
@@ -17,6 +18,10 @@ import dalvik.system.DexClassLoader;
 public class PluginManager {
 
     private static HashMap<String, Plugin> mPluginMap = new HashMap<String, Plugin>();
+
+    private PluginManager() {
+
+    }
 
     public static Plugin getPlugin(String apkPath) {
         return mPluginMap.get(apkPath);
