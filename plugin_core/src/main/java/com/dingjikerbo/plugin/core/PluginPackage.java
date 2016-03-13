@@ -1,5 +1,6 @@
 package com.dingjikerbo.plugin.core;
 
+import android.content.pm.PackageInfo;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 
@@ -8,14 +9,16 @@ import dalvik.system.DexClassLoader;
 /**
  * Created by dingjikerbo on 16/3/12.
  */
-public class Plugin {
+public class PluginPackage {
     public Resources resources;
     public AssetManager assetManager;
     public DexClassLoader dexClassLoader;
+    public PackageInfo packageInfo;
 
-    public Plugin(DexClassLoader dexClassLoader, AssetManager assetManager, Resources resources) {
+    public PluginPackage(DexClassLoader dexClassLoader, Resources resources, PackageInfo packageInfo) {
         this.resources = resources;
-        this.assetManager = assetManager;
+        this.assetManager = resources.getAssets();
         this.dexClassLoader = dexClassLoader;
+        this.packageInfo = packageInfo;
     }
 }

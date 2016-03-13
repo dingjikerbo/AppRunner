@@ -1,10 +1,11 @@
 package com.dingjikerbo.plugin.core;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 
-import com.dingjikerbo.library.Singleton;
 import com.dingjikerbo.library.utils.FileUtils;
 
 import java.lang.reflect.Method;
@@ -17,37 +18,61 @@ import dalvik.system.DexClassLoader;
  */
 public class PluginManager {
 
-    private static HashMap<String, Plugin> mPluginMap = new HashMap<String, Plugin>();
+    private static PluginManager sInstance;
 
-    private PluginManager() {
+    private Context mContext;
 
+    private String mNativeLibDir;
+    private HashMap<String, PluginPackage> mPluginMap = new HashMap<String, PluginPackage>();
+
+    private PluginManager(Context context) {
+        mContext = context.getApplicationContext();
+        mNativeLibDir = mContext.getDir("pluginlib", Context.MODE_PRIVATE).getAbsolutePath();
     }
 
-    public static Plugin getPlugin(String apkPath) {
-        return mPluginMap.get(apkPath);
+    public static PluginManager getInstance(Context context) {
+        if (sInstance == null) {
+            synchronized (PluginManager.class) {
+                if (sInstance == null) {
+                    sInstance = new PluginManager(context);
+                }
+            }
+        }
+        return sInstance;
     }
 
-    public static void loadPluginApk(Context context, String apkPath) {
-        String dexOutputPath = context.getDir("plugin", 0).getAbsolutePath();
+    public PluginPackage loadPluginApk(String apkPath) {
+        PackageInfo packageInfo = mContext.getPackageManager().getPackageArchiveInfo(apkPath,
+                PackageManager.GET_ACTIVITIES);
+        if (packageInfo == null) {
+            return null;
+        }
 
-        FileUtils.deleteFile(dexOutputPath, false);
+        PluginPackage plugin = getPluginPackage(packageInfo.packageName);
+        if (plugin != null) {
+            return plugin;
+        }
 
-        DexClassLoader dexClassLoader = new DexClassLoader(apkPath, dexOutputPath,
-                null, PluginManager.class.getClassLoader());
-
+        DexClassLoader dexClassLoader = createDexClassLoader(apkPath);
         AssetManager assetManager = createAssetManager(apkPath);
-        Resources resources = createResources(context, assetManager);
+        Resources resources = createResources(assetManager);
 
-        Plugin plugin = new Plugin(dexClassLoader, assetManager, resources);
-
+        plugin = new PluginPackage(dexClassLoader, resources, packageInfo);
         mPluginMap.put(apkPath, plugin);
+
+        return plugin;
     }
 
-    private static AssetManager createAssetManager(String dexPath) {
+    private DexClassLoader createDexClassLoader(String apkPath) {
+        String dexOutputPath = mContext.getDir("plugin", Context.MODE_PRIVATE).getAbsolutePath();
+        FileUtils.deleteFile(dexOutputPath, false);
+        return new DexClassLoader(apkPath, dexOutputPath, mNativeLibDir, mContext.getClassLoader());
+    }
+
+    private AssetManager createAssetManager(String dexPath) {
         try {
             AssetManager assetManager = AssetManager.class.newInstance();
-            Method addAssetPath = assetManager.getClass().getMethod(
-                    "addAssetPath", String.class);
+            Method addAssetPath = assetManager.getClass().getMethod("addAssetPath", String.class);
             addAssetPath.invoke(assetManager, dexPath);
             return assetManager;
         } catch (Exception e) {
@@ -56,10 +81,14 @@ public class PluginManager {
         }
     }
 
-    private static Resources createResources(Context context, AssetManager assetManager) {
-        Resources superRes = context.getResources();
+    private Resources createResources(AssetManager assetManager) {
+        Resources superRes = mContext.getResources();
         Resources resources = new Resources(assetManager,
                 superRes.getDisplayMetrics(), superRes.getConfiguration());
         return resources;
+    }
+
+    public PluginPackage getPluginPackage(String packageName) {
+        return mPluginMap.get(packageName);
     }
 }
