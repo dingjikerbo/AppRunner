@@ -1,4 +1,4 @@
-package com.dingjikerbo.plugin.core;
+package com.dingjikerbo.plugin;
 
 import android.content.pm.PackageInfo;
 import android.content.res.AssetManager;

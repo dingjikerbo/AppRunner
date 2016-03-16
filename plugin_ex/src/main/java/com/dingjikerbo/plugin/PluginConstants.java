@@ -1,4 +1,4 @@
-package com.dingjikerbo.plugin.core;
+package com.dingjikerbo.plugin;
 
 /**
  * Created by dingjikerbo on 16/3/13.

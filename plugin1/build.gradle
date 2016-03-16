@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "com.dingjikerbo.apprunner"
+        applicationId "com.dingjikerbo.plugin1"
         minSdkVersion 14
         targetSdkVersion 23
         versionCode 1
@@ -23,7 +23,5 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.1.1'
-    compile project(':library')
-    compile project(':plugin_core')
-    compile project(':plugin_ex')
+    provided project(':plugin_ex')
 }

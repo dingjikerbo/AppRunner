@@ -7,6 +7,7 @@ import android.content.res.AssetManager;
 import android.content.res.Resources;
 
 import com.dingjikerbo.library.utils.FileUtils;
+import com.dingjikerbo.plugin.PluginPackage;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;

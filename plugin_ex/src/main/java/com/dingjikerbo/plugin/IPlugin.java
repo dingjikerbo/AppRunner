@@ -1,4 +1,4 @@
-package com.dingjikerbo.plugin.core;
+package com.dingjikerbo.plugin;
 
 import android.app.Activity;
 import android.os.Bundle;

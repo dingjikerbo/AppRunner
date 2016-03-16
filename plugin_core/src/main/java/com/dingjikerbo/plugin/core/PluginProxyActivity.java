@@ -1,6 +1,5 @@
 package com.dingjikerbo.plugin.core;
 
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
@@ -9,9 +8,10 @@ import android.content.res.Resources;
 import android.content.res.Resources.Theme;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.dingjikerbo.library.BaseActivity;
+import com.dingjikerbo.plugin.IPlugin;
+import com.dingjikerbo.plugin.PluginPackage;
 
 import java.lang.reflect.Constructor;
 
