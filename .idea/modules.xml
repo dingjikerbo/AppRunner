@@ -4,10 +4,9 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/AppRunner.iml" filepath="$PROJECT_DIR$/AppRunner.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/library/library.iml" filepath="$PROJECT_DIR$/library/library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/plugcore/plugcore.iml" filepath="$PROJECT_DIR$/plugcore/plugcore.iml" />
       <module fileurl="file://$PROJECT_DIR$/plugin1/plugin1.iml" filepath="$PROJECT_DIR$/plugin1/plugin1.iml" />
-      <module fileurl="file://$PROJECT_DIR$/plugin_core/plugin_core.iml" filepath="$PROJECT_DIR$/plugin_core/plugin_core.iml" />
-      <module fileurl="file://$PROJECT_DIR$/plugin_ex/plugin_ex.iml" filepath="$PROJECT_DIR$/plugin_ex/plugin_ex.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pluglib/pluglib.iml" filepath="$PROJECT_DIR$/pluglib/pluglib.iml" />
     </modules>
   </component>
 </project>
