@@ -1,5 +1,6 @@
 package com.inuker.plugcore;
 
+import com.inuker.pluglib.IPluginProxyActivity;
 import com.inuker.pluglib.PluginHostApi;
 
 import android.content.Context;

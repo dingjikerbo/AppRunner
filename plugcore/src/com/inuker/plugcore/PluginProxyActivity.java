@@ -8,12 +8,16 @@ import com.inuker.pluglib.IPluginProxyActivity;
 import com.inuker.pluglib.PluginBaseActivity;
 
 import android.app.Activity;
+import android.app.Application;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.content.res.Resources.Theme;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 public class PluginProxyActivity extends Activity implements IPluginProxyActivity {
 
@@ -28,7 +32,7 @@ public class PluginProxyActivity extends Activity implements IPluginProxyActivit
 		super.onCreate(savedInstanceState);
 
 		Intent intent = getIntent();
-		String packageName = intent.getStringExtra(PluginConstants.EXTRA_PACKAGE_NAME);
+		final String packageName = intent.getStringExtra(PluginConstants.EXTRA_PACKAGE_NAME);
 		String className = intent.getStringExtra(PluginConstants.EXTRA_CLASS_NAME);
 
 		Log.i("bush", String.format("PluginProxyActivity.onCreate: packageName = %s, className = %s", packageName,
@@ -39,7 +43,8 @@ public class PluginProxyActivity extends Activity implements IPluginProxyActivit
 		try {
 			Class<?> clazz = mLoadedApk.getClassLoader().loadClass(className);
 			mPluginActivity = (PluginBaseActivity) clazz.newInstance();
-			mPluginActivity.attachProxy(this);
+			mPluginActivity.attachProxy(packageName, this);
+			mPluginActivity.attachBaseContext(this);
 			handleActivityTheme();
 			mPluginActivity.onCreate(savedInstanceState);
 		} catch (ClassNotFoundException e) {
@@ -53,19 +58,6 @@ public class PluginProxyActivity extends Activity implements IPluginProxyActivit
 			e.printStackTrace();
 		}
 	}
-
-	private final InvocationHandler mPluginHandler = new InvocationHandler() {
-
-		@Override
-		public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-			// TODO Auto-generated method stub
-			if (method.getName().equals("onCreate")) {
-				return null;
-			}
-			return method.invoke(PluginProxyActivity.this, args);
-		}
-
-	};
 	
 	private void handleActivityTheme() {
 		Theme superTheme = super.getTheme();
@@ -109,4 +101,20 @@ public class PluginProxyActivity extends Activity implements IPluginProxyActivit
 		}
 	}
 
+	@Override
+	public void startActivity(Intent extIntent) {
+		Intent intent = new Intent();
+		intent.putExtras(extIntent);
+
+		intent.setClass(this, PluginProxyActivity.class);
+		intent.putExtra(PluginConstants.EXTRA_PACKAGE_NAME, extIntent.getComponent().getPackageName());
+		intent.putExtra(PluginConstants.EXTRA_CLASS_NAME, extIntent.getComponent().getClassName());
+
+		startActivity(intent);
+	}
+
+	@Override
+	public View findViewById(int id) {
+		return super.findViewById(id);
+	}
 }
